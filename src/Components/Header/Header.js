@@ -7,11 +7,11 @@ import './Header.css';
 
 const Header = () => {
   const [user] = useState(auth);
-  const [name, setName] =useState();
 
   const handleLogOut = () =>{
     signOut(auth);
   }
+  
   return (
     <Row>
       <Col md>
@@ -24,10 +24,12 @@ const Header = () => {
             <Link to="/contact">Contact</Link>
 
             {
-              user ? <button onClick={handleLogOut}>Logout</button>
-              :<Link to="/login">Login</Link>
+              user ? 
+              <button onClick={handleLogOut}>Logout</button>
+              :
+              <Link to="/login">Login</Link>
             }
-            {user.name}
+  
           </nav>
         </div>
       </Col>
