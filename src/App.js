@@ -12,10 +12,7 @@ import Home from './Pages/Home';
 import Page404 from './Pages/Page404';
 import RequireAuth from './RequireAuth/RequireAuth';
 
-
 function App() {
-
- 
   return (
     <Container>
       <Header></Header>
@@ -33,7 +30,6 @@ function App() {
         <Route path='/register' element={<Register></Register>}></Route>
         <Route path='*' element={<Page404></Page404>}></Route>
       </Routes>
-      
     </Container>
   );
 }

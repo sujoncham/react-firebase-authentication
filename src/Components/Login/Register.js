@@ -33,7 +33,6 @@ const Register = () => {
     navigate('/home')
   }
 
-
   const handleCreateEvent = (event) => {
     console.log("submitted", name, email, password);
     event.preventDefault();

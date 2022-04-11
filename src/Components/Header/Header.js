@@ -1,12 +1,13 @@
 import { signOut } from "firebase/auth";
-import React, { useState } from "react";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase.init";
 import './Header.css';
 
 const Header = () => {
-  const [user] = useState(auth);
+  const {user} = useAuthState(auth);
 
   const handleLogOut = () =>{
     signOut(auth);
@@ -22,14 +23,14 @@ const Header = () => {
             <Link to="/about">About</Link>
             <Link to="/blogs">Blogs</Link>
             <Link to="/contact">Contact</Link>
-
+           
             {
-              user ? 
-              <button onClick={handleLogOut}>Logout</button>
-              :
+            user?.uid 
+            ? 
+              <button onClick={handleLogOut}>Logout</button> 
+              : 
               <Link to="/login">Login</Link>
             }
-  
           </nav>
         </div>
       </Col>
