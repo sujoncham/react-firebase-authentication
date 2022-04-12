@@ -7,12 +7,8 @@ import { auth } from "../../firebase.init";
 import './Header.css';
 
 const Header = () => {
-  const {user} = useAuthState(auth);
-
-  const handleLogOut = () =>{
-    signOut(auth);
-  }
-  
+  const [newUser] = useAuthState(auth);
+  console.log(newUser?.displayName);
   return (
     <Row>
       <Col md>
@@ -23,11 +19,9 @@ const Header = () => {
             <Link to="/about">About</Link>
             <Link to="/blogs">Blogs</Link>
             <Link to="/contact">Contact</Link>
-           
             {
-            user?.uid 
-            ? 
-              <button onClick={handleLogOut}>Logout</button> 
+            newUser? 
+              <button onClick={()=> signOut(auth)}>Logout</button> 
               : 
               <Link to="/login">Login</Link>
             }

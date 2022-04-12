@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.init";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [signInWithGoogle] = useSignInWithGoogle(auth);
+  
+
+  const [
+    signInWithEmailAndPassword,
+    newUser, 
+    loading, 
+    error
+  ] = useSignInWithEmailAndPassword(auth);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location?.state.from.pathName || "/";
 
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const from = location.state?.from?.pathName || "/";
 
   const handleEventEmail = (event) => {
     setEmail(event.target.value);
@@ -21,7 +29,7 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  if (user) {
+  if (newUser) {
     navigate(from, { replace: true });
   }
 
@@ -41,6 +49,7 @@ const Login = () => {
               onBlur={handleEventEmail}
               type="email"
               placeholder="Enter email"
+              required
             />
             <Form.Text className="text-danger">{error?.message}</Form.Text>
             {loading && <p>Loading ....</p>}
@@ -52,6 +61,7 @@ const Login = () => {
               onBlur={handleEventPassword}
               type="password"
               placeholder="Password"
+              required
             />
           </Form.Group>
 
@@ -62,7 +72,7 @@ const Login = () => {
             If you don't register. Please, <Link to="/register">Register</Link>{" "}
             here!!
           </p>
-          <Button variant="primary" type="submit">
+          <Button onClick={()=>signInWithGoogle()} variant="primary" type="submit">
             Continue with Google
           </Button>
         </Form>

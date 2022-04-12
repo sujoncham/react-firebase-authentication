@@ -1,9 +1,12 @@
+//for google signup
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from "react-router-dom";
 import { auth } from '../../firebase.init';
 
+const googleProvider = new GoogleAuthProvider();
 
 const Register = () => {
   const [name, setName] = useState();
@@ -13,8 +16,7 @@ const Register = () => {
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  
-  const [createUserWithEmailAndPassword, user, hookError] = useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, newUser, hookError] = useCreateUserWithEmailAndPassword(auth);
 
   const handleEventName = (event) => {
     setName(event.target.value);
@@ -29,8 +31,19 @@ const Register = () => {
     setConfirmPassword(event.target.value);
   };
 
-  if(user){
-    navigate('/home')
+  if(newUser){
+    navigate('/login')
+  }
+
+  const signInWithGoogle = () =>{
+signInWithPopup(auth, googleProvider)
+  .then((result) => {
+    const user = result.user;
+    console.log(user);
+  }).catch((error) => {
+    const errorMessage = error.message;
+    console.log(errorMessage);
+  });
   }
 
   const handleCreateEvent = (event) => {
@@ -49,7 +62,6 @@ const Register = () => {
     createUserWithEmailAndPassword(email, password);
 
   };
-
 
   return (
     <Row>
@@ -92,8 +104,9 @@ const Register = () => {
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
               onBlur={handleEventConfirmPassword}
-              type="confirm-password"
+              type="password"
               placeholder="Confirm Password"
+              required
             />
           </Form.Group>
 
@@ -101,6 +114,11 @@ const Register = () => {
             Sign Up
           </Button>
         </Form>
+        <div className="mt-5">
+        <Button onClick={signInWithGoogle} variant="primary" type="submit">
+            Continue with Google
+          </Button>
+        </div>
       </Col>
     </Row>
   );
